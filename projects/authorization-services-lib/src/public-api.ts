@@ -1,5 +1,5 @@
 /*
- * Public API Surface of athorization-services-lib
+ * Public API Surface of authorization-services-lib
  */
 
 export * from './lib/services/token-renew';
