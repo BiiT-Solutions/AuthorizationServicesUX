@@ -13,7 +13,7 @@ export class AuthService implements AuthCalls {
   private static readonly MIN_WAIT_TIME: number = 1000;
   private static readonly TOLERANCE: number = 1000 * 60 * 5; // 5 minutes
   private timeoutId: number;
-  constructor(private serverUrl: string, private httpClient: HttpClient) { }
+  constructor(private serverUrl: URL, private httpClient: HttpClient) { }
   public getAll(): Observable<User[]> {
     return this.httpClient.get<User[]>(`${this.serverUrl}${AuthService.ROOT_PATH}/register`);
   }
