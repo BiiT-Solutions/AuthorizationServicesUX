@@ -1,6 +1,6 @@
 {
   "name": "authorization-services-lib",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "peerDependencies": {
     "@angular/common": "v14-lts",
     "@angular/core": "v14-lts"
