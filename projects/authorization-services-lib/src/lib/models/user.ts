@@ -3,16 +3,15 @@ import {ElementDto} from "./element-dto";
 export class User extends ElementDto {
   idCard: string;
   username: string;
-  firstname: string;
+  name: string;
   lastname: string;
   email: string;
   phone: string;
-  locale: string;
+  languageId: string;
   password: string;
   passwordModifiedDate: Date;
   accountLocked: boolean;
   accountBlocked: boolean;
-  accountExpired: boolean;
   enabled: boolean;
 
   public static override clone(from: User): User {
@@ -25,16 +24,15 @@ export class User extends ElementDto {
     super.copy(from, to);
     to.idCard = from.idCard;
     to.username = from.username;
-    to.firstname = from.firstname;
+    to.name = from.name;
     to.lastname = from.lastname;
     to.email = from.email;
     to.phone = from.phone;
-    to.locale = from.locale;
+    to.languageId = from.languageId;
     to.password = from.password;
     to.passwordModifiedDate = from.passwordModifiedDate ? new Date(from.passwordModifiedDate) : null;
     to.accountLocked = from.accountLocked;
     to.accountBlocked = from.accountBlocked;
-    to.accountExpired = from.accountExpired;
     to.enabled = from.enabled;
   }
 }
