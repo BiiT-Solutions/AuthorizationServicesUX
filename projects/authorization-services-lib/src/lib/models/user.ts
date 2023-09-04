@@ -13,6 +13,7 @@ export class User extends ElementDto {
   accountLocked: boolean;
   accountBlocked: boolean;
   enabled: boolean;
+  city: string;
 
   public static override clone(from: User): User {
     const to: User = new User();
@@ -34,5 +35,6 @@ export class User extends ElementDto {
     to.accountLocked = from.accountLocked;
     to.accountBlocked = from.accountBlocked;
     to.enabled = from.enabled;
+    to.city = from.city;
   }
 }
