@@ -71,6 +71,7 @@ export class AuthService implements AuthCalls {
             }
             const authToken: string = res.headers.get('authorization');
             const expiration: number = Number(res.headers.get('expires'));
+            const user: User = User.clone(res.body);
             if (!authToken || !expiration) {
               throw new Error('Server returned invalid response');
             }
@@ -78,7 +79,7 @@ export class AuthService implements AuthCalls {
               throw new Error('Server returned invalid expiration time');
             }
             console.log(`Next token renew on: ${new Date(expiration)}`);
-            tokenRenewListener.onTokenReceived(authToken, expiration);
+            tokenRenewListener.onTokenReceived(authToken, expiration, user);
             const newTimeOut: number = expiration - new Date().getTime() - tolerance;
             this.setTimeoutRenew(authToken, newTimeOut, tokenRenewListener, tolerance);
 
