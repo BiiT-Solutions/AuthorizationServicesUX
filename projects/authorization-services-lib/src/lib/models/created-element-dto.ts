@@ -8,6 +8,6 @@ export class CreatedElementDto {
     return to;
   }
   public static copy(from: CreatedElementDto, to: CreatedElementDto): void {
-    to.createdAt = from.createdAt ? new Date(from.createdAt) : null;
+    to.createdAt = from?.createdAt ? new Date(from.createdAt) : null;
     to.createdBy = from.createdBy;
   }}
