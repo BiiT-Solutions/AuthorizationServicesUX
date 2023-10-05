@@ -26,21 +26,21 @@ export class User extends ElementDto {
 
   public static override copy(from: User, to: User): void {
     super.copy(from, to);
-    to.idCard = from?.idCard;
-    to.uuid = from?.uuid;
-    to.username = from?.username;
-    to.name = from?.name;
-    to.lastname = from?.lastname;
-    to.email = from?.email;
-    to.phone = from?.phone;
-    to.languageId = from?.languageId;
-    to.password = from?.password;
-    to.passwordModifiedDate = from?.passwordModifiedDate ? new Date(from.passwordModifiedDate) : null;
-    to.accountLocked = from?.accountLocked;
-    to.accountBlocked = from?.accountBlocked;
-    to.enabled = from?.enabled;
-    to.city = from?.city;
-    to.address = from?.address;
-    to.country = from?.country;
+    to.idCard = from.idCard;
+    to.uuid = from.uuid;
+    to.username = from.username;
+    to.name = from.name;
+    to.lastname = from.lastname;
+    to.email = from.email;
+    to.phone = from.phone;
+    to.languageId = from.languageId;
+    to.password = from.password;
+    to.passwordModifiedDate = from.passwordModifiedDate ? new Date(from.passwordModifiedDate) : null;
+    to.accountLocked = from.accountLocked;
+    to.accountBlocked = from.accountBlocked;
+    to.enabled = from.enabled;
+    to.city = from.city;
+    to.address = from.address;
+    to.country = from.country;
   }
 }

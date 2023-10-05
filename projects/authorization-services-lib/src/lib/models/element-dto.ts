@@ -13,7 +13,7 @@ export class ElementDto extends CreatedElementDto {
   public static override copy(from: ElementDto, to: ElementDto): void {
     super.copy(from, to);
     to.id = from.id;
-    to.updatedAt = from?.updatedAt ? new Date(from.updatedAt) : null;
-    to.updatedBy = from?.updatedBy;
+    to.updatedAt = from.updatedAt ? new Date(from.updatedAt) : null;
+    to.updatedBy = from.updatedBy;
   }
 }
