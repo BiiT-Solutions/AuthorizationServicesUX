@@ -2,6 +2,7 @@ import {ElementDto} from "./element-dto";
 
 export class User extends ElementDto {
   idCard: string;
+  uuid: string;
   username: string;
   name: string;
   lastname: string;
@@ -26,6 +27,7 @@ export class User extends ElementDto {
   public static override copy(from: User, to: User): void {
     super.copy(from, to);
     to.idCard = from?.idCard;
+    to.uuid = from?.uuid;
     to.username = from?.username;
     to.name = from?.name;
     to.lastname = from?.lastname;
