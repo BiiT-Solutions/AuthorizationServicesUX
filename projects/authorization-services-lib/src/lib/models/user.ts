@@ -17,6 +17,7 @@ export class User extends ElementDto {
   city: string;
   address: string;
   country: string;
+  grantedAuthorities: string[];
 
   public static override clone(from: User): User {
     const to: User = new User();
@@ -42,5 +43,6 @@ export class User extends ElementDto {
     to.city = from.city;
     to.address = from.address;
     to.country = from.country;
+    to.grantedAuthorities = from.grantedAuthorities;
   }
 }
