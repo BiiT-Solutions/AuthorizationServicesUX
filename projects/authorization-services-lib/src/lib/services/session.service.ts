@@ -95,13 +95,13 @@ export class SessionService implements OnDestroy, TokenRenewListener {
     SessionService.loggedIn = true;
   }
 
-  static getToken(): string {
+  getToken(): string {
     return sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_TOKEN);
   }
 
-  static isTokenExpired(): boolean {
+  isTokenExpired(): boolean {
     const expired: boolean = !sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION) ||
-      new Date().getTime() > +sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION) || !SessionService.getToken();
+      new Date().getTime() > +sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION) || !this.getToken();
     if (!expired) {
       SessionService.loggedIn = true;
     }
@@ -115,7 +115,7 @@ export class SessionService implements OnDestroy, TokenRenewListener {
     return null;
   }
 
-  static get isLoggedIn(): boolean {
+  get isLoggedIn(): boolean {
     return SessionService.loggedIn;
   }
 
@@ -132,7 +132,7 @@ export class SessionService implements OnDestroy, TokenRenewListener {
     SessionService.user = user;
   }
 
-  static getUser(): User {
+  getUser(): User {
     return SessionService.user;
   }
 
