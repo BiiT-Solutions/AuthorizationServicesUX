@@ -12,3 +12,4 @@ export * from './lib/models/password-request';
 export * from './lib/models/element-dto';
 export * from './lib/models/created-element-dto';
 export * from './lib/models/root-path';
+export * from './lib/services/session.service';
