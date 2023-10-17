@@ -1,4 +1,5 @@
 import {ElementDto} from "./element-dto";
+import {Role} from "./role";
 
 export class User extends ElementDto {
   idCard: string;
@@ -17,7 +18,7 @@ export class User extends ElementDto {
   city: string;
   address: string;
   country: string;
-  grantedAuthorities: string[];
+  grantedAuthorities: Role[];
 
   public static override clone(from: User): User {
     const to: User = new User();
