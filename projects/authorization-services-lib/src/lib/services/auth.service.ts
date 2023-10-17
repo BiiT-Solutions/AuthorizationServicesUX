@@ -6,6 +6,7 @@ import {LoginRequest} from "../models/login-request";
 import {PasswordRequest} from "../models/password-request";
 import {TokenRenewListener} from "./token-renew";
 import {AuthCalls} from "./auth-calls";
+import {RootPath} from "../models/root-path";
 
 export class AuthService implements AuthCalls {
 
@@ -13,27 +14,27 @@ export class AuthService implements AuthCalls {
   private static readonly MIN_WAIT_TIME: number = 1000;
   private static readonly TOLERANCE: number = 1000 * 60 * 5; // 5 minutes
   private timeoutId: number;
-  constructor(private serverUrl: URL, private httpClient: HttpClient) { }
+  constructor(private rootPath: RootPath, private httpClient: HttpClient) { }
   public getAll(): Observable<User[]> {
-    return this.httpClient.get<User[]>(`${this.serverUrl}${AuthService.ROOT_PATH}/register`);
+    return this.httpClient.get<User[]>(`${this.rootPath.getRootPath()}${AuthService.ROOT_PATH}/register`);
   }
   public add(user: User): Observable<User> {
-    return this.httpClient.post<User>(`${this.serverUrl}${AuthService.ROOT_PATH}/register`, user);
+    return this.httpClient.post<User>(`${this.rootPath.getRootPath()}${AuthService.ROOT_PATH}/register`, user);
   }
   public update(request: CreateUserRequest): Observable<User> {
-    return this.httpClient.patch<User>(`${this.serverUrl}${AuthService.ROOT_PATH}/register`, request);
+    return this.httpClient.patch<User>(`${this.rootPath.getRootPath()}${AuthService.ROOT_PATH}/register`, request);
   }
   public login(request: LoginRequest): Observable<HttpResponse<User>> {
-    return this.httpClient.post<User>(`${this.serverUrl}${AuthService.ROOT_PATH}/public/login`, request, {observe: 'response'});
+    return this.httpClient.post<User>(`${this.rootPath.getRootPath()}${AuthService.ROOT_PATH}/public/login`, request, {observe: 'response'});
   }
   public changePassword(request: PasswordRequest): Observable<void> {
-    return this.httpClient.post<void>(`${this.serverUrl}${AuthService.ROOT_PATH}/password`, request);
+    return this.httpClient.post<void>(`${this.rootPath.getRootPath()}${AuthService.ROOT_PATH}/password`, request);
   }
   public getRoles(): Observable<string[]> {
-    return this.httpClient.get<string[]>(`${this.serverUrl}${AuthService.ROOT_PATH}/roles`);
+    return this.httpClient.get<string[]>(`${this.rootPath.getRootPath()}${AuthService.ROOT_PATH}/roles`);
   }
   public deleteByUserName(username: string): Observable<void> {
-    return this.httpClient.delete<void>(`${this.serverUrl}${AuthService.ROOT_PATH}/register/${username}`);
+    return this.httpClient.delete<void>(`${this.rootPath.getRootPath()}${AuthService.ROOT_PATH}/register/${username}`);
   }
 
   public cancelAutoRenew(): void {
@@ -95,8 +96,8 @@ export class AuthService implements AuthCalls {
   public renew(token ?: string): Observable<HttpResponse<User>> {
     return token ?
       this.httpClient.get<User>(
-        `${this.serverUrl}${AuthService.ROOT_PATH}/jwt/renew`, {headers: {'Authorization': 'Bearer ' + token}, observe: 'response'})
+        `${this.rootPath.getRootPath()}${AuthService.ROOT_PATH}/jwt/renew`, {headers: {'Authorization': 'Bearer ' + token}, observe: 'response'})
       : this.httpClient.get<User>(
-        `${this.serverUrl}${AuthService.ROOT_PATH}/jwt/renew`, {observe: 'response'});
+        `${this.rootPath.getRootPath()}${AuthService.ROOT_PATH}/jwt/renew`, {observe: 'response'});
   }
 }
