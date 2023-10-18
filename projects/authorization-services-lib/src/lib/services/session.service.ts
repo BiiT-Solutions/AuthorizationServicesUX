@@ -8,8 +8,8 @@ import {User} from "../models/user";
   providedIn: 'root'
 })
 export class SessionService implements OnDestroy, TokenRenewListener {
-  private static loggedIn: boolean = false;
-  private static user: User;
+  private loggedIn: boolean = false;
+  private user: User;
   private store: boolean;
   constructor(private authService: AuthService) {
     const authToken: string = localStorage.getItem(Constants.SESSION_STORAGE.AUTH_TOKEN);
@@ -18,7 +18,7 @@ export class SessionService implements OnDestroy, TokenRenewListener {
     if (!user) {
       user = sessionStorage.getItem(Constants.SESSION_STORAGE.USER) ? User.clone(JSON.parse(sessionStorage.getItem(Constants.SESSION_STORAGE.USER))) : undefined;
     }
-    SessionService.user = user;
+    this.user = user;
     if (!expires || isNaN(expires) || expires < new Date().getTime()) {
       localStorage.removeItem(Constants.SESSION_STORAGE.AUTH_TOKEN);
       localStorage.removeItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION);
@@ -31,7 +31,7 @@ export class SessionService implements OnDestroy, TokenRenewListener {
       if (expires && !isNaN(expires)) {
         sessionStorage.setItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION, expires.toString());
       }
-      SessionService.loggedIn = true;
+      this.loggedIn = true;
     }
     if ((authToken && expires)
       || (sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_TOKEN) && sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION))) {
@@ -67,8 +67,8 @@ export class SessionService implements OnDestroy, TokenRenewListener {
     localStorage.removeItem(Constants.SESSION_STORAGE.AUTH_TOKEN);
     localStorage.removeItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION);
     localStorage.removeItem(Constants.SESSION_STORAGE.USER);
-    SessionService.loggedIn = false;
-    SessionService.user = undefined;
+    this.loggedIn = false;
+    this.user = undefined;
   }
 
   setToken(token: string, expires: number, enableStore: boolean = undefined, autoRenew: boolean = false): void {
@@ -92,7 +92,7 @@ export class SessionService implements OnDestroy, TokenRenewListener {
     if (autoRenew) {
       this.setAutoRenew(token, expires);
     }
-    SessionService.loggedIn = true;
+    this.loggedIn = true;
   }
 
   getToken(): string {
@@ -103,7 +103,7 @@ export class SessionService implements OnDestroy, TokenRenewListener {
     const expired: boolean = !sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION) ||
       new Date().getTime() > +sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION) || !this.getToken();
     if (!expired) {
-      SessionService.loggedIn = true;
+      this.loggedIn = true;
     }
     return expired;
   }
@@ -116,7 +116,7 @@ export class SessionService implements OnDestroy, TokenRenewListener {
   }
 
   get isLoggedIn(): boolean {
-    return SessionService.loggedIn;
+    return this.loggedIn;
   }
 
   setUser(user: User, enableStore: boolean = undefined): void {
@@ -129,11 +129,11 @@ export class SessionService implements OnDestroy, TokenRenewListener {
     if (this.store) {
       localStorage.setItem(Constants.SESSION_STORAGE.USER, JSON.stringify(user));
     }
-    SessionService.user = user;
+    this.user = user;
   }
 
   getUser(): User {
-    return SessionService.user;
+    return this.user;
   }
 
 }
