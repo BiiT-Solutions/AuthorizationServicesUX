@@ -11,42 +11,42 @@ export class SessionService implements OnDestroy, TokenRenewListener {
   private loggedIn: boolean = false;
   private user: User;
   private store: boolean;
-  constructor(private authService: AuthService) {
-    const authToken: string = localStorage.getItem(Constants.SESSION_STORAGE.AUTH_TOKEN);
-    const expires: number = +localStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION);
-    let user: User = localStorage.getItem(Constants.SESSION_STORAGE.USER) ? User.clone(JSON.parse(localStorage.getItem(Constants.SESSION_STORAGE.USER))) : undefined;
+  constructor(private authService: AuthService, private context: string = '') {
+    const authToken: string = localStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_TOKEN}`);
+    const expires: number = +localStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`);
+    let user: User = localStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.USER}`) ? User.clone(JSON.parse(localStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.USER}`))) : undefined;
     if (!user) {
-      user = sessionStorage.getItem(Constants.SESSION_STORAGE.USER) ? User.clone(JSON.parse(sessionStorage.getItem(Constants.SESSION_STORAGE.USER))) : undefined;
+      user = sessionStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.USER}`) ? User.clone(JSON.parse(sessionStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.USER}`))) : undefined;
     }
     this.user = user;
     if (!expires || isNaN(expires) || expires < new Date().getTime()) {
-      localStorage.removeItem(Constants.SESSION_STORAGE.AUTH_TOKEN);
-      localStorage.removeItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION);
-      localStorage.removeItem(Constants.SESSION_STORAGE.USER);
+      localStorage.removeItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_TOKEN}`);
+      localStorage.removeItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`);
+      localStorage.removeItem(`${this.context}.${Constants.SESSION_STORAGE.USER}`);
     }
     if (authToken) {
-      sessionStorage.setItem(Constants.SESSION_STORAGE.AUTH_TOKEN, authToken);
-      sessionStorage.setItem(Constants.SESSION_STORAGE.USER, JSON.stringify(user));
+      sessionStorage.setItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_TOKEN}`, authToken);
+      sessionStorage.setItem(`${this.context}.${Constants.SESSION_STORAGE.USER}`, JSON.stringify(user));
       this.store = true;
       if (expires && !isNaN(expires)) {
-        sessionStorage.setItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION, expires.toString());
+        sessionStorage.setItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`, expires.toString());
       }
       this.loggedIn = true;
     }
     if ((authToken && expires)
-      || (sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_TOKEN) && sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION))) {
-      this.setAutoRenew(authToken? authToken : sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_TOKEN)
-        , expires ? expires : +sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION));
+      || (sessionStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_TOKEN}`) && sessionStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`))) {
+      this.setAutoRenew(authToken? authToken : sessionStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_TOKEN}`)
+        , expires ? expires : +sessionStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`));
     }
   }
 
   onTokenReceived(token: string, expiration: number, user: User): void {
     this.setToken(token, expiration);
     this.setUser(user);
-    console.log('Token has been renewed successfully.', token);
+    console.log(`Token ${this.context ? 'for' + this.context : ''} has been renewed successfully.`, token);
   }
   onException(error: any): void {
-    console.error('There was an exception while renewing the token.');
+    console.error(`There was an exception while renewing the token ${this.context ? 'for' + this.context : ''}.`);
     this.clearToken();
   }
 
@@ -60,13 +60,13 @@ export class SessionService implements OnDestroy, TokenRenewListener {
   }
 
   clearToken(): void {
-    sessionStorage.removeItem(Constants.SESSION_STORAGE.AUTH_TOKEN);
-    sessionStorage.removeItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION);
-    sessionStorage.removeItem(Constants.SESSION_STORAGE.USER);
+    sessionStorage.removeItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_TOKEN}`);
+    sessionStorage.removeItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`);
+    sessionStorage.removeItem(`${this.context}.${Constants.SESSION_STORAGE.USER}`);
     this.store = undefined;
-    localStorage.removeItem(Constants.SESSION_STORAGE.AUTH_TOKEN);
-    localStorage.removeItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION);
-    localStorage.removeItem(Constants.SESSION_STORAGE.USER);
+    localStorage.removeItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_TOKEN}`);
+    localStorage.removeItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`);
+    localStorage.removeItem(`${this.context}.${Constants.SESSION_STORAGE.USER}`);
     this.loggedIn = false;
     this.user = undefined;
   }
@@ -76,18 +76,18 @@ export class SessionService implements OnDestroy, TokenRenewListener {
       this.clearToken();
       return;
     }
-    sessionStorage.setItem(Constants.SESSION_STORAGE.AUTH_TOKEN, token);
-    sessionStorage.setItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION, expires.toString());
+    sessionStorage.setItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_TOKEN}`, token);
+    sessionStorage.setItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`, expires.toString());
     if (enableStore !== undefined) {
       this.store = enableStore;
       if (!enableStore) {
-        localStorage.removeItem(Constants.SESSION_STORAGE.AUTH_TOKEN);
-        localStorage.removeItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION);
+        localStorage.removeItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_TOKEN}`);
+        localStorage.removeItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`);
       }
     }
     if (this.store) {
-      localStorage.setItem(Constants.SESSION_STORAGE.AUTH_TOKEN, token);
-      localStorage.setItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION, expires.toString());
+      localStorage.setItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_TOKEN}`, token);
+      localStorage.setItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`, expires.toString());
     }
     if (autoRenew) {
       this.setAutoRenew(token, expires);
@@ -96,21 +96,21 @@ export class SessionService implements OnDestroy, TokenRenewListener {
   }
 
   getToken(): string {
-    return sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_TOKEN);
+    return sessionStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_TOKEN}`);
   }
 
   isTokenExpired(): boolean {
-    const expired: boolean = !sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION) ||
-      new Date().getTime() > +sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION) || !this.getToken();
+    const expired: boolean = !sessionStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`) ||
+      new Date().getTime() > +sessionStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`) || !this.getToken();
     if (!expired) {
       this.loggedIn = true;
     }
     return expired;
   }
   getExpirationDate(): Date {
-    const sessionExpiration = sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION);
+    const sessionExpiration = sessionStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`);
     if (!isNaN(+sessionExpiration)) {
-      return new Date(+sessionStorage.getItem(Constants.SESSION_STORAGE.AUTH_EXPIRATION));
+      return new Date(+sessionStorage.getItem(`${this.context}.${Constants.SESSION_STORAGE.AUTH_EXPIRATION}`));
     }
     return null;
   }
@@ -120,14 +120,14 @@ export class SessionService implements OnDestroy, TokenRenewListener {
   }
 
   setUser(user: User, enableStore: boolean = undefined): void {
-    sessionStorage.setItem(Constants.SESSION_STORAGE.USER, JSON.stringify(user));
+    sessionStorage.setItem(`${this.context}.${Constants.SESSION_STORAGE.USER}`, JSON.stringify(user));
     if (enableStore !== undefined) {
       if (!enableStore) {
-        localStorage.removeItem(Constants.SESSION_STORAGE.USER);
+        localStorage.removeItem(`${this.context}.${Constants.SESSION_STORAGE.USER}`);
       }
     }
     if (this.store) {
-      localStorage.setItem(Constants.SESSION_STORAGE.USER, JSON.stringify(user));
+      localStorage.setItem(`${this.context}.${Constants.SESSION_STORAGE.USER}`, JSON.stringify(user));
     }
     this.user = user;
   }
