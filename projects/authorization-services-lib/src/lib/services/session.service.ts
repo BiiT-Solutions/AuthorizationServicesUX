@@ -1,13 +1,9 @@
-import {Injectable, OnDestroy} from '@angular/core';
 import {Constants} from "../constants";
 import {AuthService} from "./auth.service";
 import {TokenRenewListener} from "./token-renew";
 import {User} from "../models/user";
 
-@Injectable({
-  providedIn: 'root'
-})
-export class SessionService implements OnDestroy, TokenRenewListener {
+export class SessionService implements TokenRenewListener {
   private loggedIn: boolean = false;
   private user: User;
   private store: boolean;
@@ -53,10 +49,6 @@ export class SessionService implements OnDestroy, TokenRenewListener {
   private setAutoRenew(token: string, expires: number): void {
     // ADD HERE ALL SERVICES NEED TO BE CALLED TO RENEW TOKEN
     this.authService.autoRenewToken(token, expires, this);
-  }
-
-  ngOnDestroy(): void {
-    this.clearToken();
   }
 
   clearToken(): void {
