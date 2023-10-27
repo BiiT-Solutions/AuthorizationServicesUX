@@ -1,7 +1,7 @@
 import {CreatedElementDto} from "./created-element-dto";
 
 export class ElementDto extends CreatedElementDto {
-  id: any;
+  id: string | number;
   updatedAt: Date;
   updatedBy: string;
 
