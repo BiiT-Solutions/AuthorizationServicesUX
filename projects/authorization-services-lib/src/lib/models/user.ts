@@ -20,7 +20,7 @@ export class User extends ElementDto {
   address: string;
   country: string;
   grantedAuthorities: Role[];
-  applicationRoles: AppRole[]
+  applicationRoles: AppRole[];
 
 
   public static override clone(from: User): User {
