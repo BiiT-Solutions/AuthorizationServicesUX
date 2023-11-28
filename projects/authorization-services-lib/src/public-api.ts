@@ -13,4 +13,5 @@ export * from './lib/models/element-dto';
 export * from './lib/models/created-element-dto';
 export * from './lib/models/root-path';
 export * from './lib/models/role';
+export * from './lib/models/app-role';
 export * from './lib/services/session.service';
