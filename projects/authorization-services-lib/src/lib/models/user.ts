@@ -13,6 +13,7 @@ export class User extends ElementDto {
   languageId: string;
   password: string;
   passwordModifiedDate: Date;
+  accountExpirationTime: Date;
   accountLocked: boolean;
   accountBlocked: boolean;
   enabled: boolean;
@@ -41,6 +42,7 @@ export class User extends ElementDto {
     to.languageId = from.languageId;
     to.password = from.password;
     to.passwordModifiedDate = from.passwordModifiedDate ? new Date(from.passwordModifiedDate) : null;
+    to.accountExpirationTime = from.accountExpirationTime ? new Date(from.accountExpirationTime) : null;
     to.accountLocked = from.accountLocked;
     to.accountBlocked = from.accountBlocked;
     to.enabled = from.enabled;
