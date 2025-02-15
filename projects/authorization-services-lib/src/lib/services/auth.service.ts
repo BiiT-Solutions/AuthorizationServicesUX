@@ -36,11 +36,12 @@ export class AuthService implements AuthCalls {
   public deleteByUserName(username: string): Observable<void> {
     return this.httpClient.delete<void>(`${this.rootPath.getRootPath()}${AuthService.ROOT_PATH}/register/${username}`);
   }
-
   public cancelAutoRenew(): void {
     clearTimeout(this.timeoutId);
   }
-
+  public loginByToken(token: string): Observable<HttpResponse<User>> {
+    return this.httpClient.get<User>(`${this.rootPath.getRootPath()}${AuthService.ROOT_PATH}/login/tokens/${token}`, {observe: 'response'});
+  }
   public autoRenewToken(token: string, expiration: number, tokenRenewListener: TokenRenewListener,
                         tolerance: number = AuthService.TOLERANCE): void {
     if (this.timeoutId != null) {
