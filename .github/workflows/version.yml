@@ -36,6 +36,11 @@ jobs:
           git config user.name $GITHUB_ACTOR
           git config user.email ${GITHUB_ACTOR}-actions@github.com
           npm version patch --force -m "Version: %s"
+          json_file=./projects/authorization-services-lib/package.json
+          version=`cat package.json | grep -Po '(?<="version": ")[^"]*'`
+          sed -i -e "s|  \"version\".*|  \"version\"\: \"${version}\",|g" ${json_file}
+          git add ${json_file}
+          git commit -m "Version: ${version}"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
