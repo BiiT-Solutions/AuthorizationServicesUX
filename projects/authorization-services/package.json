@@ -1,6 +1,6 @@
 {
   "name": "authorization-services",
-  "version": "0.0.69",
+  "version": "0.0.70",
   "peerDependencies": {
     "@angular/common": "v15-lts",
     "@angular/core": "v15-lts"
