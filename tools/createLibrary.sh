@@ -4,7 +4,7 @@ read -p "Library Name (DON'T INCLUDE '-lib'): " LIB_NAME
 
 ng new $PROJECT_NAME --create-application=false
 cd $PROJECT_NAME || exit 1
-npm install authorization-services-lib@latest
+npm install authorization-services@latest
 
 LIB_PATH=$LIB_NAME-lib
 ng g lib $LIB_PATH
@@ -26,7 +26,7 @@ mkdir -p models services
 cd services || exit 1
 ng g s $LIB_NAME-root
 
-sed -i "2 s/^/import {RootPath} from 'authorization-services-lib';\n/" $LIB_NAME-root.service.ts
+sed -i "2 s/^/import {RootPath} from 'authorization-services';\n/" $LIB_NAME-root.service.ts
 sed -i "s/Service {/Service implements RootPath {/g" $LIB_NAME-root.service.ts
 
 sed '/constructor/r'<(cat <<EOF
@@ -53,7 +53,7 @@ ng g s auth
 
 sed -i "2 s/^/import {HttpClient} from '@angular\/common\/http';\n/" auth.service.ts
 sed -i "3 s/^/import {$ROOT_NAME} from '.\/${LIB_NAME}-root.service';\n/" auth.service.ts
-sed -i "4 s/^/import {AuthService as AuthenticationService} from 'authorization-services-lib';\n/" auth.service.ts
+sed -i "4 s/^/import {AuthService as AuthenticationService} from 'authorization-services';\n/" auth.service.ts
 sed -i "s/Service {/Service extends AuthenticationService {/g" auth.service.ts
 
 sed '/constructor/r'<(cat <<EOF
@@ -69,7 +69,7 @@ sed -i "s/CONST_NEW/constructor/g" auth.service.ts
 
 ng g s session
 
-sed -i "2 s/^/import {SessionService as AuthSessionService} from 'authorization-services-lib';\n/" session.service.ts
+sed -i "2 s/^/import {SessionService as AuthSessionService} from 'authorization-services';\n/" session.service.ts
 sed -i "3 s/^/import {AuthService} from '.\/auth.service';\n/" session.service.ts
 sed -i "4 s/^/import {Constants} from '..\/constants';\n/" session.service.ts
 sed -i "s/Service {/Service extends AuthSessionService {/g" session.service.ts

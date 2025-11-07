@@ -3,23 +3,23 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "authorization-services-lib": {
+    "authorization-services": {
       "projectType": "library",
-      "root": "projects/authorization-services-lib",
-      "sourceRoot": "projects/authorization-services-lib/src",
+      "root": "projects/authorization-services",
+      "sourceRoot": "projects/authorization-services/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/authorization-services-lib/ng-package.json"
+            "project": "projects/authorization-services/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/authorization-services-lib/tsconfig.lib.prod.json"
+              "tsConfig": "projects/authorization-services/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/authorization-services-lib/tsconfig.lib.json"
+              "tsConfig": "projects/authorization-services/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -27,7 +27,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": "projects/authorization-services-lib/tsconfig.spec.json",
+            "tsConfig": "projects/authorization-services/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
               "zone.js/testing"

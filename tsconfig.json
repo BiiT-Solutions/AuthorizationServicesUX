@@ -3,8 +3,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "authorization-services-lib": [
-        "dist/authorization-services-lib"
+      "authorization-services": [
+        "dist/authorization-services"
       ]
     },
     "baseUrl": "./",
