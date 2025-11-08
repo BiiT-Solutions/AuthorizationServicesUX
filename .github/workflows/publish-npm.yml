@@ -22,7 +22,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build authorization-services library
+        run: npx ng build authorization-services --configuration production
+
       - name: Set login
+        working-directory: dist/authorization-services
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         run: |
