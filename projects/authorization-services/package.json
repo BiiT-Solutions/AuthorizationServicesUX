@@ -1,6 +1,6 @@
 {
   "name": "@biit-solutions/authorization-services",
-  "version": "0.0.71",
+  "version": "0.0.73",
   "peerDependencies": {
     "@angular/common": "v15-lts",
     "@angular/core": "v15-lts"
